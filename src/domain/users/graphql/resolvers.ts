@@ -6,6 +6,9 @@ export default {
   Query: {
     getUser: async (obj: any, args: any, context: any) => {
       return await service.getUser(args.first_name)
+    },
+    getAllUsers: async (obj: any, args: any, context: any) => {
+      return await service.getAllUsers()
     }
   },
   Mutation: {

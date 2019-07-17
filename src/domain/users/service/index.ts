@@ -11,6 +11,10 @@ export default class {
     return this.repository.getUser(user_id)
   }
 
+  getAllUsers(): Promise<User[]> {
+    return this.repository.getAllUsers()
+  }
+
   createUser(first_name: string, last_name: string, email: string) {
     const user = new User(first_name, last_name, email)
     return this.repository.createUser(user)
