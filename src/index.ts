@@ -1,8 +1,7 @@
 import { ApolloServer } from 'apollo-server-express';
 import express from 'express'
 import bodyParser from 'body-parser';
-
-import typeDefs from './graphql/types'
+import typeDefs from './graphql/typeDefs'
 import resolvers from './graphql/resolvers'
 
 const app = express().use(bodyParser.json());
