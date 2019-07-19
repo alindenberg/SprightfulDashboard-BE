@@ -23,4 +23,8 @@ export default class {
   createUser(user: User): Promise<User> {
     return this.db.getCollection('users').insertOne(user).then(() => user)
   }
+
+  deleteUser(user_id: string): Promise<boolean> {
+    return this.db.getCollection('users').deleteOne({ user_id: user_id }).then(((res) => res.deletedCount == 1))
+  }
 }

@@ -1,3 +1,4 @@
+import uuidv4 from 'uuid/v4'
 import User from '../types'
 import UserRepository from '../repository'
 
@@ -15,8 +16,17 @@ export default class {
     return this.repository.getAllUsers()
   }
 
-  createUser(first_name: string, last_name: string, email: string) {
-    const user = new User(first_name, last_name, email)
+  createUser(first_name: string, last_name: string, email: string): Promise<User> {
+    const user = new User(uuidv4(), first_name, last_name, email)
     return this.repository.createUser(user)
+  }
+
+  updateUser(user_id: string, first_name: string, last_name: string, email: string): Promise<User> {
+    const user = new User(user_id, first_name, last_name, email)
+    return this.repository.createUser(user)
+  }
+
+  deleteUser(user_id: string): Promise<boolean> {
+    return this.repository.deleteUser(user_id)
   }
 }
