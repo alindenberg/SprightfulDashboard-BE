@@ -3,7 +3,8 @@ import UserQueries from '../domain/users/graphql/queries'
 import UserMutations from '../domain/users/graphql/mutations'
 import PowerCompanyTypes from '../domain/powerCompanys/graphql/types'
 import PowerCompanyQueries from '../domain/powerCompanys/graphql/queries'
-import PowerCompanyMutations from '../domain/powerCompanys/graphql/mutations'
+import PowerCompanyMutations from '../domain/powerCompanys/graphql/mutations/index'
+
 export default [
   UserTypes,
   UserQueries,

@@ -8,13 +8,13 @@ class PowerCompany {
   constructor(power_company_id: string, name: string, abbreviated_name: string, rates: PowerCompanyRates, peaks: PowerCompanyPeak[]) {
     this.power_company_id = power_company_id
     this.name = name
-    this.abbreviated_name = name
+    this.abbreviated_name = abbreviated_name
     this.rates = rates
     this.peaks = peaks
   }
 }
-
 class PowerCompanyRates {
+  base_charge: number
   flat_under: number
   flat_over: number
   on_peak_under: number
