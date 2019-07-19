@@ -7,7 +7,12 @@ const UserTypes = gql`
     last_name     :String
     email         :String
     locations     :[String]
-    ecobee_tokens :String
+    ecobee_tokens :UserEcobeeTokens
+  }
+
+  type UserEcobeeTokens {
+    access_token  :String
+    refresh_token :String
   }
 `;
 

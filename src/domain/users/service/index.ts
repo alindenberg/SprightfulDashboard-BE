@@ -1,5 +1,5 @@
 import uuidv4 from 'uuid/v4'
-import User from '../types'
+import User from '../models'
 import UserRepository from '../repository'
 
 export default class {

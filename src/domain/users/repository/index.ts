@@ -1,6 +1,6 @@
 import { Db } from 'mongodb'
 
-import User from '../types'
+import User from '../models'
 
 import Database from '../../../database'
 import { cursorTo } from 'readline';
@@ -11,8 +11,8 @@ export default class {
     this.db = new Database()
   }
 
-  getUser(first_name: string): Promise<User> {
-    return this.db.getCollection('users').findOne({ first_name: first_name }).then(user => user)
+  getUser(user_id: string): Promise<User> {
+    return this.db.getCollection('users').findOne({ user_id: user_id }).then(user => user)
   }
 
   getAllUsers(): Promise<User[]> {

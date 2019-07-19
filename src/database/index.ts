@@ -1,6 +1,6 @@
 import { MongoClient, Db, Collection } from 'mongodb'
 
-export default class database {
+export default class {
   private db: Db;
 
   constructor() {

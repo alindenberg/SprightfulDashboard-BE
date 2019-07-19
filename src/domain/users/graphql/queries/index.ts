@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express'
 
 const UserQueries = gql`
   type Query {
-    getUser(first_name: String): User
+    getUser(user_id: String!): User
     getAllUsers: [User]
   }
 `
