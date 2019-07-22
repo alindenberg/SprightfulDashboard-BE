@@ -1,7 +1,5 @@
 import { MongoClient, Db, Collection } from 'mongodb'
 
-let db: Db;
-
 function initDb(): void {
   MongoClient.connect('mongodb://localhost:27017', { useNewUrlParser: true }, (err, client) => {
     if (err) {

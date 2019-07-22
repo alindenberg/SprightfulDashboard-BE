@@ -1,7 +1,8 @@
-import { PowerCompany } from "../../powerCompanys/models";
+import PowerCompany from "../../powerCompanys/models";
 
 export default class {
-  location_name: string
+  location_id: string
+  name: string
   neurio_sensor_id: string
   power_company_id: string
   power_company: PowerCompany
@@ -11,21 +12,34 @@ export default class {
   bank: Bank
   savings_info: SavingsInfo
   energy_info: EnergyInfo
+
+  constructor(
+    location_id: string,
+    name: string,
+    neurio_sensor_id: string,
+    power_company_id: string,
+    billing_cycles: BillingCycle[],
+    thermostats: string[],
+    bank: Bank) {
+    this.location_id = location_id
+    this.name = name
+    this.neurio_sensor_id = neurio_sensor_id
+    this.power_company_id = power_company_id
+    this.billing_cycles = billing_cycles
+    this.thermostats = thermostats
+    this.bank = bank
+  }
 }
 
 class BillingCycle {
-  name: string
-  start_time: number
-  end_time: number
   start_date: string
   end_date: string
+  bub: number
 
-  constructor(name: string, start_time: number, end_time: number, start_date: string, end_date: string) {
-    this.name = name
-    this.start_time = start_time
-    this.end_time = end_time
+  constructor(start_date: string, end_date: string, bub: number) {
     this.start_date = start_date
     this.end_date = end_date
+    this.bub = bub
   }
 }
 
@@ -41,4 +55,9 @@ class SavingsInfo {
 
 class EnergyInfo {
   amount: string
+}
+
+export {
+  BillingCycle,
+  Bank
 }

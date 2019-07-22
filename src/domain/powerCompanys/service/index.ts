@@ -1,5 +1,5 @@
 import uuidv4 from 'uuid/v4';
-import { PowerCompany, PowerCompanyPeak, PowerCompanyRates } from '../models'
+import PowerCompany, { PowerCompanyPeak, PowerCompanyRates } from '../models'
 import PowerCompanyRepository from '../repository';
 
 export default class {
@@ -29,7 +29,6 @@ export default class {
     rates: PowerCompanyRates,
     peaks: PowerCompanyPeak[]
   ): Promise<PowerCompany> {
-
     const powercompany = new PowerCompany(power_company_id, name, abbreviated_name, rates, peaks)
     return this.repository.updatePowerCompany(powercompany)
   }

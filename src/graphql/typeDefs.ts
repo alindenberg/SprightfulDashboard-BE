@@ -6,7 +6,7 @@ import PowerCompanyQueries from '../domain/powerCompanys/graphql/queries'
 import PowerCompanyMutations from '../domain/powerCompanys/graphql/mutations/index'
 import LocationTypes from '../domain/locations/graphql/types'
 import LocationQueries from '../domain/locations/graphql/queries'
-// import LocationMutations from '../domain/locations/graphql/mutations'
+import LocationMutations from '../domain/locations/graphql/mutations'
 
 export default [
   UserTypes,
@@ -17,5 +17,5 @@ export default [
   PowerCompanyMutations,
   LocationTypes,
   LocationQueries,
-  // LocationMutations
+  LocationMutations
 ]

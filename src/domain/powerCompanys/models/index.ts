@@ -1,4 +1,4 @@
-class PowerCompany {
+export default class PowerCompany {
   power_company_id: string
   name: string
   abbreviated_name: string
@@ -31,7 +31,6 @@ class PowerCompanyPeak {
 }
 
 export {
-  PowerCompany,
   PowerCompanyRates,
   PowerCompanyPeak
 }
