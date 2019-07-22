@@ -1,30 +1,26 @@
-import { Db } from 'mongodb'
-
 import User from '../models'
-
-import Database from '../../../database'
-import { cursorTo } from 'readline';
+import { getCollection } from '../../../database'
 
 export default class {
-  private db: Database
+  private collection_name: string
   constructor() {
-    this.db = new Database()
+    this.collection_name = 'users'
   }
 
   getUser(user_id: string): Promise<User> {
-    return this.db.getCollection('users').findOne({ user_id: user_id }).then(user => user)
+    return getCollection(this.collection_name).findOne({ user_id: user_id }).then(user => user)
   }
 
   getAllUsers(): Promise<User[]> {
-    return this.db.getCollection('users').find().toArray()
+    return getCollection(this.collection_name).find().toArray()
 
   }
 
   createUser(user: User): Promise<User> {
-    return this.db.getCollection('users').insertOne(user).then(() => user)
+    return getCollection(this.collection_name).insertOne(user).then(() => user)
   }
 
   deleteUser(user_id: string): Promise<boolean> {
-    return this.db.getCollection('users').deleteOne({ user_id: user_id }).then(((res) => res.deletedCount == 1))
+    return getCollection(this.collection_name).deleteOne({ user_id: user_id }).then(((res) => res.deletedCount == 1))
   }
 }
