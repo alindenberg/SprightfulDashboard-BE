@@ -10,6 +10,8 @@ const LocationMutations = gql`
       thermostats: [String]
       bank: BankInput!
     ): Location
+    
+    deleteLocation(location_id: String!): Boolean
   }
 `
 

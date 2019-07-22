@@ -36,4 +36,8 @@ export default class {
       "amount": "Some savings info"
     }
   }
+
+  deleteLocation(location_id: string): Promise<boolean> {
+    return this.repository.deleteLocation(location_id)
+  }
 }

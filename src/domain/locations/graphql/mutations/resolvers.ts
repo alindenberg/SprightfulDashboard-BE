@@ -12,5 +12,8 @@ export default {
       args.thermostats,
       args.bank
     )
+  },
+  deleteLocation: async (_: any, args: any) => {
+    return await service.deleteLocation(args.location_id)
   }
 }

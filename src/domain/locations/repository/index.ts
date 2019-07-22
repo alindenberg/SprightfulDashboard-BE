@@ -14,4 +14,9 @@ export default class {
   createLocation(location: Location): Promise<Location> {
     return getCollection(this.collection_name).insertOne(location).then(() => location)
   }
+
+  deleteLocation(location_id: string): Promise<boolean> {
+    return getCollection(this.collection_name).deleteOne({ location_id: location_id })
+      .then(res => res.deletedCount == 1)
+  }
 }
