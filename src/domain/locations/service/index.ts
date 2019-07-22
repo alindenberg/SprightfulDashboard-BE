@@ -40,4 +40,26 @@ export default class {
   deleteLocation(location_id: string): Promise<boolean> {
     return this.repository.deleteLocation(location_id)
   }
+
+  updateLocationBank(location_id: string, bank: Bank): Promise<Boolean> {
+    let error = this.validateBank(bank)
+    if (error != null) {
+      throw error
+    }
+    return this.repository.updateLocationBank(location_id, bank)
+  }
+
+  updateLocationBillingCycles(location_id: string, billing_cycles: BillingCycle[]): Promise<boolean> {
+    // TODO: validate billing cycles. (should be 12(?) non overlapping & continuous linking on end-to-start days)
+    return this.repository.updateLocationBillingCycles(location_id, billing_cycles)
+  }
+
+  private validateBank(bank: Bank): Error {
+    if (
+      bank.flat_rate_hours < 0 ||
+      bank.off_peak_hours < 0 ||
+      bank.on_peak_hours < 0) {
+      return new Error("Bank value may not be less than 0")
+    }
+  }
 }

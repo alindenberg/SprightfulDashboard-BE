@@ -12,6 +12,10 @@ const LocationMutations = gql`
     ): Location
     
     deleteLocation(location_id: String!): Boolean
+
+    updateLocationBank(location_id: String!, bank: BankInput!): Boolean
+
+    updateLocationBillingCycles(location_id: String!, billing_cycles: [BillingCycleInput!]!): Boolean
   }
 `
 

@@ -1,5 +1,5 @@
 import { getCollection } from "../../../database";
-import Location from '../models'
+import Location, { Bank, BillingCycle } from '../models'
 
 export default class {
   private collection_name: string
@@ -18,5 +18,11 @@ export default class {
   deleteLocation(location_id: string): Promise<boolean> {
     return getCollection(this.collection_name).deleteOne({ location_id: location_id })
       .then(res => res.deletedCount == 1)
+  }
+  updateLocationBank(location_id: string, bank: Bank): Promise<boolean> {
+    return getCollection(this.collection_name).updateOne({ location_id: location_id }, { '$set': { 'bank': bank } }).then(res => res.modifiedCount == 1)
+  }
+  updateLocationBillingCycles(location_id: string, billing_cycles: BillingCycle[]): Promise<boolean> {
+    return getCollection(this.collection_name).updateOne({ location_id: location_id }, { '$set': { 'billing_cycles': billing_cycles } }).then(res => res.modifiedCount == 1)
   }
 }
