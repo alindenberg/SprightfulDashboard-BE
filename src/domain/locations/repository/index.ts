@@ -25,4 +25,7 @@ export default class {
   updateLocationBillingCycles(location_id: string, billing_cycles: BillingCycle[]): Promise<boolean> {
     return getCollection(this.collection_name).updateOne({ location_id: location_id }, { '$set': { 'billing_cycles': billing_cycles } }).then(res => res.modifiedCount == 1)
   }
+  getLocationsForUser(user_id: string): Promise<Location[]> {
+    return getCollection(this.collection_name).find({ owner_id: user_id }).toArray()
+  }
 }

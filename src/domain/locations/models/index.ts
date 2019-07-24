@@ -3,6 +3,7 @@ import PowerCompany from "../../powerCompanys/models";
 export default class {
   location_id: string
   name: string
+  owner_id: string
   neurio_sensor_id: string
   power_company_id: string
   power_company: PowerCompany
@@ -16,6 +17,7 @@ export default class {
   constructor(
     location_id: string,
     name: string,
+    owner_id: string,
     neurio_sensor_id: string,
     power_company_id: string,
     billing_cycles: BillingCycle[],
@@ -23,6 +25,7 @@ export default class {
     bank: Bank) {
     this.location_id = location_id
     this.name = name
+    this.owner_id = owner_id
     this.neurio_sensor_id = neurio_sensor_id
     this.power_company_id = power_company_id
     this.billing_cycles = billing_cycles

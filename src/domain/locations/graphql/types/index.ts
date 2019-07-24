@@ -3,6 +3,7 @@ import { gql } from 'apollo-server-express'
 const LocationTypes = gql`
   type Location {
     location_id: String
+    owner_id: String
     name: String
     neurio_sensor_id: String
     power_company_id: String

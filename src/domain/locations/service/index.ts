@@ -15,13 +15,14 @@ export default class {
 
   createLocation(
     name: string,
+    owner_id: string,
     neurio_sensor_id: string,
     power_company_id: string,
     billing_cycles: BillingCycle[],
     thermostats: string[],
     bank: Bank
   ): Promise<Location> {
-    const location = new Location(uuidv4(), name, neurio_sensor_id, power_company_id, billing_cycles, thermostats, bank)
+    const location = new Location(uuidv4(), name, owner_id, neurio_sensor_id, power_company_id, billing_cycles, thermostats, bank)
     return this.repository.createLocation(location)
   }
 
@@ -56,6 +57,10 @@ export default class {
     //   throw error
     // }
     return this.repository.updateLocationBillingCycles(location_id, billing_cycles)
+  }
+
+  getLocationsForUser(user_id: string): Promise<Location[]> {
+    return this.repository.getLocationsForUser(user_id)
   }
 
   // Billing cycles should be contiguous non-overlapping and cover all 365 days of the year

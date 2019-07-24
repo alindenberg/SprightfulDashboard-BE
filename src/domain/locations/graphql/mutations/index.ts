@@ -4,6 +4,7 @@ const LocationMutations = gql`
   extend type Mutation {
     createLocation(
       name: String!
+      owner_id: String!
       neurio_sensor_id: String!
       power_company_id: String!
       billing_cycles: [BillingCycleInput!]!
