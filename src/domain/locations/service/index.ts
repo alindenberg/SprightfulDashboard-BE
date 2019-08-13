@@ -1,4 +1,6 @@
+import base64 from 'base-64'
 import uuidv4 from 'uuid/v4'
+import fetch from 'node-fetch'
 import LocationRepository from '../repository'
 import Location, { BillingCycle, Bank } from '../models'
 
@@ -19,26 +21,42 @@ export default class {
     neurio_sensor_id: string,
     fpl_id: string,
     power_company_id: string,
+    is_tou: boolean,
     billing_cycles: BillingCycle[],
     thermostats: string[],
     bank: Bank
   ): Promise<Location> {
-    const location = new Location(uuidv4(), name, owner_id, neurio_sensor_id, fpl_id, power_company_id, billing_cycles, thermostats, bank)
+    const location = new Location(uuidv4(), name, owner_id, neurio_sensor_id, fpl_id, power_company_id, is_tou, billing_cycles, thermostats, bank)
     return this.repository.createLocation(location)
   }
+  getNeurioInfo(sensor_id: string, start: string, end: string) {
+    return fetch(`https://api.neur.io/v1/samples/stats?sensorId=${sensor_id}&start=${start}&end=${end}&granularity=hours&frequency=1&perPage=500&page=1`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.NEURIO_TOKEN}`
+      }
 
-  getEnergyInfo() {
-    return {
-      "amount": "Some energy info"
-    }
+    }).then(async (res) => {
+      return (await res.json())
+    }).catch(err => {
+      console.log("Error ", err)
+      return null
+    })
   }
-
-  getSavingsInfo() {
-    return {
-      "amount": "Some savings info"
-    }
+  getFplInfo(fpl_id: string) {
+    return fetch(`https://www.fpl.com/api/resources/account/${fpl_id}/energyUsage`, {
+      method: 'GET',
+      headers: {
+        'Authorization': ('Basic ' + base64.encode(process.env.FPL_USERNAME + ":" + process.env.FPL_PASSWORD))
+      }
+    }).then(async res => {
+      return (await res.json()).data
+    }).catch(err => {
+      console.log("Error ", err)
+      return null
+    })
   }
-
   deleteLocation(location_id: string): Promise<boolean> {
     return this.repository.deleteLocation(location_id)
   }

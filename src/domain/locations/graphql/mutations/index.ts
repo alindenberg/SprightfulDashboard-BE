@@ -10,6 +10,7 @@ const LocationMutations = gql`
       power_company_id: String!
       billing_cycles: [BillingCycleInput!]!
       thermostats: [String]
+      is_tou: Boolean!
       bank: BankInput!
     ): Location
     

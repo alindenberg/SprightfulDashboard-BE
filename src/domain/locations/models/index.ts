@@ -8,6 +8,7 @@ export default class {
   fpl_id: string
   power_company_id: string
   power_company: PowerCompany
+  is_tou: boolean
   billing_cycles: BillingCycle[]
   // Replace with Thermostat object
   thermostats: string[]
@@ -22,6 +23,7 @@ export default class {
     neurio_sensor_id: string,
     fpl_id: string,
     power_company_id: string,
+    is_tou: boolean,
     billing_cycles: BillingCycle[],
     thermostats: string[],
     bank: Bank) {
@@ -31,6 +33,7 @@ export default class {
     this.neurio_sensor_id = neurio_sensor_id
     this.fpl_id = fpl_id
     this.power_company_id = power_company_id
+    this.is_tou = is_tou
     this.billing_cycles = billing_cycles
     this.thermostats = thermostats
     this.bank = bank

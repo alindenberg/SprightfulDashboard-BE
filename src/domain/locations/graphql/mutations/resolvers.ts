@@ -10,6 +10,7 @@ export default {
       args.neurio_sensor_id,
       args.fpl_id,
       args.power_company_id,
+      args.is_tou,
       args.billing_cycles,
       args.thermostats,
       args.bank

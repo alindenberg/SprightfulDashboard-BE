@@ -11,8 +11,8 @@ const LocationTypes = gql`
     billing_cycles: [BillingCycle]
     thermostats: [String]
     bank: Bank
-    savings_info(start_date: String, end_date: String): SavingsInfo
-    energy_info(start_date: String, end_date: String): EnergyInfo
+    neurio_info(start_date: String!, end_date: String!): [NeurioInfo]
+    fpl_info: [FplInfo]
   }
   type BillingCycle {
     start_date: String
@@ -24,11 +24,33 @@ const LocationTypes = gql`
     on_peak_hours: Float
     flat_rate_hours: Float
   }
-  type SavingsInfo {
-    amount: String
+  type NeurioInfo {
+    consumptionEnergy: String
+    generationEnergy: String
+    importedEnergy: String
+    exportedEnergy: String
+    submeters: [NeurioSubmeters]
+    start: String
+    end: String
   }
-  type EnergyInfo {
-    amount: String
+  type NeurioSubmeters {
+    energy: Int
+    name: String
+    channelNumber: Int
+  }
+  type FplInfo {
+    readingTo: String
+    readingFrom: String
+    onPeakConsumption: Int
+    offPeakConsumption: Int
+    onPeakDemand: Int
+    serviceDays: Int
+    kwhUsed: Int
+    maximumDemand: Int
+    billingCharge: Float
+    billingMonth: String
+    billingYear: String
+    temperature: Int
   }
 
   input BillingCycleInput {
