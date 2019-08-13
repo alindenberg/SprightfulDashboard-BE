@@ -28,21 +28,21 @@ const PowerCompanyTypes = gql`
   }
 
   input PowerCompanyRatesInput {
-    base_charge     :Float
-    flat_under      :Float
-    flat_over       :Float
-    on_peak_under   :Float
-    on_peak_over    :Float
-    off_peak_under  :Float
-    off_peak_over   :Float
+    base_charge     :Float!
+    flat_under      :Float!
+    flat_over       :Float!
+    on_peak_under   :Float!
+    on_peak_over    :Float!
+    off_peak_under  :Float!
+    off_peak_over   :Float!
   }
 
   input PowerCompanyPeakInput {
-    name            :String
-    start_time      :String
-    end_time        :String
-    start_date      :String
-    end_date        :String
+    name            :String!
+    start_time      :String!
+    end_time        :String!
+    start_date      :String!
+    end_date        :String!
   }
 `
 

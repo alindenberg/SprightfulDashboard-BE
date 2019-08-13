@@ -7,7 +7,8 @@ export default {
     return await service.createUser(
       args.first_name,
       args.last_name,
-      args.email
+      args.email,
+      args.password
     )
   },
   updateUser: async (obj: any, args: any, context: any) => {
