@@ -5,6 +5,7 @@ export default class {
   name: string
   owner_id: string
   neurio_sensor_id: string
+  fpl_id: string
   power_company_id: string
   power_company: PowerCompany
   billing_cycles: BillingCycle[]
@@ -19,6 +20,7 @@ export default class {
     name: string,
     owner_id: string,
     neurio_sensor_id: string,
+    fpl_id: string,
     power_company_id: string,
     billing_cycles: BillingCycle[],
     thermostats: string[],
@@ -27,6 +29,7 @@ export default class {
     this.name = name
     this.owner_id = owner_id
     this.neurio_sensor_id = neurio_sensor_id
+    this.fpl_id = fpl_id
     this.power_company_id = power_company_id
     this.billing_cycles = billing_cycles
     this.thermostats = thermostats

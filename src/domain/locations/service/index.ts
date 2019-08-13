@@ -17,12 +17,13 @@ export default class {
     name: string,
     owner_id: string,
     neurio_sensor_id: string,
+    fpl_id: string,
     power_company_id: string,
     billing_cycles: BillingCycle[],
     thermostats: string[],
     bank: Bank
   ): Promise<Location> {
-    const location = new Location(uuidv4(), name, owner_id, neurio_sensor_id, power_company_id, billing_cycles, thermostats, bank)
+    const location = new Location(uuidv4(), name, owner_id, neurio_sensor_id, fpl_id, power_company_id, billing_cycles, thermostats, bank)
     return this.repository.createLocation(location)
   }
 

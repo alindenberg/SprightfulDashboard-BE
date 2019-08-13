@@ -8,6 +8,7 @@ export default {
       args.name,
       args.owner_id,
       args.neurio_sensor_id,
+      args.fpl_id,
       args.power_company_id,
       args.billing_cycles,
       args.thermostats,

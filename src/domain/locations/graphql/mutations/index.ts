@@ -6,6 +6,7 @@ const LocationMutations = gql`
       name: String!
       owner_id: String!
       neurio_sensor_id: String!
+      fpl_id: String!
       power_company_id: String!
       billing_cycles: [BillingCycleInput!]!
       thermostats: [String]
