@@ -46,6 +46,8 @@ export default class {
     })
   }
   get_fpl_info(req: any) {
-    return this.service.get_fpl_info(req.params.location_id)
+    return this.service.get_location(req.params.location_id).then(async (loc) => {
+      return await this.service.get_fpl_info(loc.fpl_id)
+    })
   }
 }

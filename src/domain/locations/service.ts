@@ -5,6 +5,7 @@ import moment from 'moment-timezone'
 import PowerCompanyService from '../powerCompanys/service'
 import LocationRepository from './repository'
 import Location, { BillingCycle, Bank } from './models'
+import { NeurioCostInfo } from '../../shared/models';
 
 export default class {
   power_company_service: PowerCompanyService
@@ -29,8 +30,11 @@ export default class {
     thermostats: string[],
     bank: Bank
   ): Promise<Location> {
+    // TODO - validate billing cycles
+    if (!this.validate_bank(bank)) {
+      throw Error("Invalid bank")
+    }
     const location = new Location(uuidv4(), name, owner_id, neurio_sensor_id, fpl_id, power_company_id, is_tou, billing_cycles, thermostats, bank)
-    console.log("Adding location ", location)
     return this.repository.create_location(location)
   }
   get_user_locations(user_id: string): Promise<Location[]> {
@@ -61,13 +65,13 @@ export default class {
         'Authorization': ('Basic ' + base64.encode(process.env.FPL_USERNAME + ":" + process.env.FPL_PASSWORD))
       }
     }).then(async res => {
-      return (await res.json()).data
+      return (await res.json()).data[0]
     }).catch(err => {
       console.log("Error ", err)
       return null
     })
   }
-  async get_neurio_info(sensor_id: string, power_company_id: string, is_tou: boolean, start: string, end: string) {
+  async get_neurio_info(sensor_id: string, power_company_id: string, is_tou: boolean, start: string, end: string): Promise<NeurioCostInfo> {
     // If location doesn't have neurio sensor, throw error to be rendered
     if (sensor_id == null) {
       throw Error("No Neurio sensor registered for location")
@@ -105,12 +109,11 @@ export default class {
   //     }
   //   }
   // }
-  private validate_bank(bank: Bank): Error {
-    if (
-      bank.flat_rate_hours < 0 ||
-      bank.off_peak_hours < 0 ||
-      bank.on_peak_hours < 0) {
-      return new Error("Bank value may not be less than 0")
-    }
+  private validate_bank(bank: Bank): boolean {
+    return (
+      bank.flat_rate_hours > 0 &&
+      bank.off_peak_hours > 0 &&
+      bank.on_peak_hours > 0
+    )
   }
 }
