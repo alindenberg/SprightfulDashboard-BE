@@ -1,20 +1,19 @@
-import PowerCompany from "../../powerCompanys/models";
+import PowerCompany from '../powerCompanys/models';
+import { Moment } from "moment";
+import moment = require("moment");
 
-export default class {
+export default class Location {
   location_id: string
   name: string
   owner_id: string
   neurio_sensor_id: string
   fpl_id: string
   power_company_id: string
-  power_company: PowerCompany
   is_tou: boolean
   billing_cycles: BillingCycle[]
   // Replace with Thermostat object
   thermostats: string[]
   bank: Bank
-  savings_info: SavingsInfo
-  energy_info: EnergyInfo
 
   constructor(
     location_id: string,
@@ -35,17 +34,28 @@ export default class {
     this.power_company_id = power_company_id
     this.is_tou = is_tou
     this.billing_cycles = billing_cycles
-    this.thermostats = thermostats
+    this.thermostats = thermostats ? thermostats : []
     this.bank = bank
+  }
+
+  get_current_billing_cycle(): BillingCycle {
+    const current = moment()
+    for (let i = 0; i < this.billing_cycles.length; i++) {
+      const billing_cycle = this.billing_cycles[i]
+      if (moment(billing_cycle.start_date) < current && moment(billing_cycle.end_date) < current) {
+        return billing_cycle
+      }
+    }
+    throw Error("Could not get current billing cycle for location.")
   }
 }
 
 class BillingCycle {
-  start_date: string
-  end_date: string
+  start_date: Moment
+  end_date: Moment
   bub: number
 
-  constructor(start_date: string, end_date: string, bub: number) {
+  constructor(start_date: Moment, end_date: Moment, bub: number) {
     this.start_date = start_date
     this.end_date = end_date
     this.bub = bub

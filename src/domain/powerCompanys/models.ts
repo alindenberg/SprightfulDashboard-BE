@@ -29,7 +29,6 @@ class PowerCompanyPeak {
   start_date: Date
   end_date: Date
 }
-
 export {
   PowerCompanyRates,
   PowerCompanyPeak

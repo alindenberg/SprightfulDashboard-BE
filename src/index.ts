@@ -1,16 +1,25 @@
-import { ApolloServer } from 'apollo-server-express';
 import express from 'express'
 import bodyParser from 'body-parser';
-import typeDefs from './graphql/typeDefs'
-import resolvers from './graphql/resolvers'
 import { initDb } from './database';
+import user_routes from './domain/users/routes'
+import location_routes from './domain/locations/routes'
+import power_company_routes from './domain/powerCompanys/routes'
 
-const app = express().use(bodyParser.json());
+const app = express()
+app.use(bodyParser.json())
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Access-Token");
+  res.header('Access-Control-Allow-Methods', "GET, POST, PUT, DELETE");
+  next();
+});
 
-const server = new ApolloServer({ typeDefs, resolvers });
-server.applyMiddleware({ app });
+app.use(user_routes)
+app.use(location_routes)
+app.use(power_company_routes)
 
-app.listen({ port: 4000 }, () => {
-  console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath} 🚀`)
+const port = 4000
+app.listen(port, () => {
   initDb()
+  console.log(`Example app listening on port ${port}!`)
 });

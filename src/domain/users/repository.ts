@@ -1,5 +1,5 @@
-import User from '../models'
-import { getCollection } from '../../../database'
+import User from './models'
+import { getCollection } from '../../database'
 
 export default class {
   private collection_name: string
@@ -7,19 +7,19 @@ export default class {
     this.collection_name = 'users'
   }
 
-  getUser(user_id: string): Promise<User> {
+  get_user(user_id: string): Promise<User> {
     return getCollection(this.collection_name).findOne({ user_id: user_id }).then(user => user)
   }
-  getAllUsers(): Promise<User[]> {
+  get_users(): Promise<User[]> {
     return getCollection(this.collection_name).find().toArray()
   }
-  createUser(user: User): Promise<User> {
+  create_user(user: User): Promise<User> {
     return getCollection(this.collection_name).insertOne(user).then(() => user)
   }
-  updateUser(user: User): Promise<User> {
+  update_user(user: User): Promise<User> {
     return getCollection(this.collection_name).replaceOne({ user_id: user.user_id }, user).then(() => user)
   }
-  deleteUser(user_id: string): Promise<boolean> {
+  delete_user(user_id: string): Promise<boolean> {
     return getCollection(this.collection_name).deleteOne({ user_id: user_id }).then(((res) => res.deletedCount == 1))
   }
 }
