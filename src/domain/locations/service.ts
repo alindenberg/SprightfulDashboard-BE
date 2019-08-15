@@ -1,7 +1,7 @@
 import base64 from 'base-64'
 import uuidv4 from 'uuid/v4'
 import fetch from 'node-fetch'
-import moment from 'moment-timezone'
+import moment, { Moment } from 'moment-timezone'
 import PowerCompanyService from '../powerCompanys/service'
 import LocationRepository from './repository'
 import Location, { BillingCycle, Bank } from './models'
@@ -32,7 +32,7 @@ export default class {
   ): Promise<Location> {
     // TODO - validate billing cycles
     if (!this.validate_bank(bank)) {
-      throw Error("Invalid bank")
+      throw Error("Invalid bank. Values must be greater than or equal to 0")
     }
     const location = new Location(uuidv4(), name, owner_id, neurio_sensor_id, fpl_id, power_company_id, is_tou, billing_cycles, thermostats, bank)
     return this.repository.create_location(location)
@@ -67,30 +67,56 @@ export default class {
     }).then(async res => {
       return (await res.json()).data[0]
     }).catch(err => {
-      console.log("Error ", err)
-      return null
+      console.log("Error getting FPL data: ", err)
+      throw err
     })
   }
-  async get_neurio_info(sensor_id: string, power_company_id: string, is_tou: boolean, start: string, end: string): Promise<NeurioCostInfo> {
+  async get_neurio_info(sensor_id: string, power_company_id: string, is_tou: boolean, start_date_string: string, end_date_string: string): Promise<NeurioCostInfo> {
     // If location doesn't have neurio sensor, throw error to be rendered
     if (sensor_id == null) {
       throw Error("No Neurio sensor registered for location")
     }
-    return fetch(`https://api.neur.io/v1/samples/stats?sensorId=${sensor_id}&start=${start}&end=${end}&granularity=hours&frequency=1&perPage=500&page=1`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.NEURIO_TOKEN}`
-      }
-    }).then(async (res) => {
-      if (res.status == 400) {
-        throw Error(`Error fetching neurio data ${res.statusText}`)
-      }
-      return await this.power_company_service.analyze_neurio_data(power_company_id, is_tou, await res.json())
-    }).catch(err => {
-      console.log("Error ", err)
-      return null
-    })
+    let sensor_data: any[] = []
+    let start_date: Moment;
+    let end_date: Moment;
+    // Account for requests spanning more than neurio's maximum 31-day range
+    try {
+      start_date = moment(start_date_string)
+      end_date = moment(end_date_string)
+      start_date_string = start_date.toISOString()
+      end_date_string = end_date.toISOString()
+    } catch (err) {
+      throw err
+    }
+
+    let end_dates = []
+    while (end_date.diff(start_date, 'days') > 31) {
+      let next_start_date = start_date.add(31, 'days')
+      end_dates.push(next_start_date.toISOString())
+      start_date = next_start_date
+    }
+    end_dates.push(end_date_string)
+
+    let start = start_date_string
+    for (let i = 0; i < end_dates.length; i++) {
+      let end = end_dates[i]
+      await fetch(`https://api.neur.io/v1/samples/stats?sensorId=${sensor_id}&start=${start}&end=${end}&granularity=hours&frequency=1&perPage=500&page=1`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.NEURIO_TOKEN}`
+        }
+
+      }).then(async (res) => {
+        const data = await res.json()
+        sensor_data.push(...data)
+        start = end
+      }).catch(() => {
+        throw new Error('Error getting neurio data')
+      })
+    }
+
+    return await this.power_company_service.analyze_neurio_data(power_company_id, is_tou, sensor_data)
   }
   // Billing cycles should be contiguous non-overlapping and cover all 365 days of the year
   // private validateBillingCycles(billing_cycles: BillingCycle[]): Error {

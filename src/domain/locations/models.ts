@@ -37,17 +37,6 @@ export default class Location {
     this.thermostats = thermostats ? thermostats : []
     this.bank = bank
   }
-
-  get_current_billing_cycle(): BillingCycle {
-    const current = moment()
-    for (let i = 0; i < this.billing_cycles.length; i++) {
-      const billing_cycle = this.billing_cycles[i]
-      if (moment(billing_cycle.start_date) < current && moment(billing_cycle.end_date) < current) {
-        return billing_cycle
-      }
-    }
-    throw Error("Could not get current billing cycle for location.")
-  }
 }
 
 class BillingCycle {

@@ -1,5 +1,6 @@
 import LocationService from './service'
 import Location from './models';
+import { get_current_billing_cycle } from '../../shared/service'
 
 export default class {
   service: LocationService
@@ -29,8 +30,8 @@ export default class {
     return this.service.get_location(req.params.location_id).then(async (location: Location) => {
       let start = null
       let end = null
-      if (req.query.currentBillingCycle == true) {
-        const billing_cycle = location.get_current_billing_cycle()
+      if (req.query.currentBillingCycle == 'true') {
+        const billing_cycle = get_current_billing_cycle(location.billing_cycles)
         start = billing_cycle.start_date
         end = billing_cycle.end_date
       } else {
