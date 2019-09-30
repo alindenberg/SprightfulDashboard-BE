@@ -1,7 +1,7 @@
 import express from 'express'
 import LocationController from './controller'
 import { format_error_response } from '../../shared/service'
-import { FplData, NeurioData, NeurioCostInfo } from '../../shared/models';
+import { FplData, EnergyInfo } from '../../shared/models';
 import Location from './models';
 // import { validate_jwt } from '../../auth/service'
 
@@ -37,8 +37,8 @@ router.delete("/locations/:location_id", async (req, res) => {
     res.send(format_error_response(err))
   })
 })
-router.get("/locations/:location_id/neurio_info", async (req, res) => {
-  await controller.get_neurio_info(req).then((result: NeurioCostInfo) => {
+router.get("/locations/:location_id/energy_info", async (req, res) => {
+  await controller.get_energy_info(req).then((result: EnergyInfo[]) => {
     res.status(200)
     res.send(result)
   }).catch((err: Error) => {

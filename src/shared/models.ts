@@ -1,61 +1,62 @@
 export class NeurioData {
-  total_generation: number
-  total_consumption: number
   on_peak_generation: number
   on_peak_consumption: number
   off_peak_generation: number
   off_peak_consumption: number
+  timestamp: string
 
   constructor(
-    total_generation: number,
-    total_consumption: number,
     on_peak_generation: number,
     on_peak_consumption: number,
     off_peak_generation: number,
-    off_peak_consumption: number
+    off_peak_consumption: number,
+    timestamp: string
   ) {
-    this.total_generation = total_generation
-    this.total_consumption = total_consumption
     this.on_peak_generation = on_peak_generation
     this.on_peak_consumption = on_peak_consumption
     this.off_peak_generation = off_peak_generation
     this.off_peak_consumption = off_peak_consumption
+    this.timestamp = timestamp
   }
 }
-export class NeurioCostInfo {
-  on_peak_energy_generated: number
-  on_peak_energy_consumed: number
-  off_peak_energy_generated: number
-  off_peak_energy_consumed: number
-  total_generation: number
-  total_consumption: number
-  on_peak_price: number
-  off_peak_price: number
-  flat_rate_price: number
-  total_tou_price: number
-  total_flat_rate_price: number
-
+export class EnergyInfo {
+  on_peak: {
+    generation_kwh: number
+    generation_savings: number
+    consumption_kwh: number
+    consumption_cost: number
+  }
+  off_peak: {
+    generation_kwh: number
+    generation_savings: number
+    consumption_kwh: number
+    consumption_cost: number
+  }
+  timestamp: string
   constructor(
-    on_peak_energy_generated: number,
-    on_peak_energy_consumed: number,
-    off_peak_energy_generated: number,
-    off_peak_energy_consumed: number,
-    on_peak_price: number,
-    off_peak_price: number,
-    flat_rate_price: number,
-    base_charge: number
+    on_peak_generation: number,
+    on_peak_generation_savings: number,
+    on_peak_consumption: number,
+    on_peak_consumption_cost: number,
+    off_peak_generation: number,
+    off_peak_generation_savings: number,
+    off_peak_consumption: number,
+    off_peak_consumption_cost: number,
+    timestamp: string
   ) {
-    this.on_peak_energy_generated = on_peak_energy_generated
-    this.on_peak_energy_consumed = on_peak_energy_consumed
-    this.off_peak_energy_generated = off_peak_energy_generated
-    this.off_peak_energy_consumed = off_peak_energy_consumed
-    this.total_generation = Number(on_peak_energy_generated) + Number(off_peak_energy_generated)
-    this.total_consumption = Number(on_peak_energy_consumed) + Number(off_peak_energy_consumed)
-    this.on_peak_price = on_peak_price
-    this.off_peak_price = off_peak_price
-    this.flat_rate_price = flat_rate_price
-    this.total_tou_price = Number(base_charge) + Number(on_peak_price + Number(off_peak_price))
-    this.total_flat_rate_price = Number(base_charge) + Number(flat_rate_price)
+    this.on_peak = {
+      generation_kwh: on_peak_generation,
+      generation_savings: on_peak_generation_savings,
+      consumption_kwh: on_peak_consumption,
+      consumption_cost: on_peak_consumption_cost
+    }
+    this.off_peak = {
+      generation_kwh: off_peak_generation,
+      generation_savings: off_peak_generation_savings,
+      consumption_kwh: off_peak_consumption,
+      consumption_cost: off_peak_consumption_cost
+    }
+    this.timestamp = timestamp
   }
 }
 export class FplData {

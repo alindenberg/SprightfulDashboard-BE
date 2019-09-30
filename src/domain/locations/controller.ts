@@ -11,14 +11,12 @@ export default class {
   create_location(req: any): Promise<Location> {
     return this.service.create_location(
       req.body.name,
-      req.body.owner_id,
       req.body.neurio_id,
       req.body.fpl_id,
       req.body.power_company_id,
       req.body.is_tou,
       req.body.billing_cycles,
-      req.body.thermostats,
-      req.body.bank)
+      req.body.thermostats)
   }
   get_location(req: any) {
     return this.service.get_location(req.params.location_id)
@@ -26,7 +24,7 @@ export default class {
   delete_location(req: any) {
     return this.service.delete_location(req.params.location_id)
   }
-  get_neurio_info(req: any) {
+  get_energy_info(req: any) {
     return this.service.get_location(req.params.location_id).then(async (location: Location) => {
       let start = null
       let end = null
@@ -38,12 +36,13 @@ export default class {
         start = req.query.start
         end = req.query.end
       }
-      return await this.service.get_neurio_info(
+
+      return await this.service.get_energy_info(
         location.neurio_sensor_id,
         location.power_company_id,
-        location.is_tou,
         start,
-        end)
+        end
+      )
     })
   }
   get_fpl_info(req: any) {

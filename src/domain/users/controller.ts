@@ -13,7 +13,7 @@ export default class {
     return this.service.get_user(req.params.user_id)
   }
   create_user(req: any): Promise<User> {
-    return this.service.create_user(req.body.name, req.body.fpl_id, req.body.sensor_id, req.body.password)
+    return this.service.create_user(req.body.name, req.body.fpl_id, req.body.sensor_id, req.body.password, req.body.locations)
   }
   update_user(req: any): Promise<User> {
     return this.service.update_user(req.params.user_id, req.body.name, req.body.fpl_id, req.body.sensor_id)

@@ -6,14 +6,16 @@ export default class User {
   last_name: string
   password: string
   email: string
+  locations: string[]
   ecobee_tokens: UserEcobeeTokens
 
-  constructor(user_id: string, first_name: string, last_name: string, email: string, password: string) {
+  constructor(user_id: string, first_name: string, last_name: string, email: string, password: string, locations: string[]) {
     this.user_id = user_id
     this.first_name = first_name
     this.last_name = last_name
     this.email = email
     this.password = crypto.createHash('sha256').update(password).digest("base64")
+    this.locations = locations
   }
 
   getName() {

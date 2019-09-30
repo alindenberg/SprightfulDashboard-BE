@@ -14,8 +14,8 @@ export default class {
   get_users(): Promise<User[]> {
     return this.repository.get_users()
   }
-  create_user(first_name: string, last_name: string, email: string, password: string): Promise<User> {
-    const user = new User(uuidv4(), first_name, last_name, email, password)
+  create_user(first_name: string, last_name: string, email: string, password: string, locations: string[]): Promise<User> {
+    const user = new User(uuidv4(), first_name, last_name, email, password, locations)
     return this.repository.create_user(user)
   }
   update_user(user_id: string, first_name: string, last_name: string, email: string): Promise<User> {

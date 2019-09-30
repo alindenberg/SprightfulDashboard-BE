@@ -5,7 +5,7 @@ import moment, { Moment } from 'moment-timezone'
 import PowerCompanyService from '../powerCompanys/service'
 import LocationRepository from './repository'
 import Location, { BillingCycle, Bank } from './models'
-import { NeurioCostInfo } from '../../shared/models';
+import { EnergyInfo } from '../../shared/models';
 
 export default class {
   power_company_service: PowerCompanyService
@@ -21,20 +21,15 @@ export default class {
   }
   create_location(
     name: string,
-    owner_id: string,
     neurio_sensor_id: string,
     fpl_id: string,
     power_company_id: string,
     is_tou: boolean,
     billing_cycles: BillingCycle[],
     thermostats: string[],
-    bank: Bank
   ): Promise<Location> {
     // TODO - validate billing cycles
-    if (!this.validate_bank(bank)) {
-      throw Error("Invalid bank. Values must be greater than or equal to 0")
-    }
-    const location = new Location(uuidv4(), name, owner_id, neurio_sensor_id, fpl_id, power_company_id, is_tou, billing_cycles, thermostats, bank)
+    const location = new Location(uuidv4(), name, neurio_sensor_id, fpl_id, power_company_id, is_tou, billing_cycles, thermostats)
     return this.repository.create_location(location)
   }
   get_user_locations(user_id: string): Promise<Location[]> {
@@ -42,13 +37,6 @@ export default class {
   }
   delete_location(location_id: string): Promise<boolean> {
     return this.repository.delete_location(location_id)
-  }
-  update_location_bank(location_id: string, bank: Bank): Promise<Boolean> {
-    let error = this.validate_bank(bank)
-    if (error != null) {
-      throw error
-    }
-    return this.repository.update_location_bank(location_id, bank)
   }
   update_location_billing_cycles(location_id: string, billing_cycles: BillingCycle[]): Promise<boolean> {
     // TODO: validate billing cycles. (should be 12(?) non overlapping & continuous linking on end-to-start days)
@@ -65,13 +53,16 @@ export default class {
         'Authorization': ('Basic ' + base64.encode(process.env.FPL_USERNAME + ":" + process.env.FPL_PASSWORD))
       }
     }).then(async res => {
-      return (await res.json()).data[0]
+      const result = (await res.json()).data[0]
+      console.log("Result ", result)
+      return result
     }).catch(err => {
       console.log("Error getting FPL data: ", err)
       throw err
     })
   }
-  async get_neurio_info(sensor_id: string, power_company_id: string, is_tou: boolean, start_date_string: string, end_date_string: string): Promise<NeurioCostInfo> {
+  async get_energy_info(sensor_id: string, power_company_id: string,
+    start_date_string: string, end_date_string: string): Promise<EnergyInfo[]> {
     // If location doesn't have neurio sensor, throw error to be rendered
     if (sensor_id == null) {
       throw Error("No Neurio sensor registered for location")
@@ -79,16 +70,19 @@ export default class {
     let sensor_data: any[] = []
     let start_date: Moment;
     let end_date: Moment;
+    let hourGranularity = false
     // Account for requests spanning more than neurio's maximum 31-day range
     try {
-      start_date = moment(start_date_string)
-      end_date = moment(end_date_string)
+      start_date = moment(start_date_string).tz('America/New_York')
+      end_date = moment(end_date_string).tz('America/New_York')
       start_date_string = start_date.toISOString()
       end_date_string = end_date.toISOString()
+
+      // if only 1-day interval, we want to get hour granularity
+      hourGranularity = moment.duration(end_date.diff(start_date)).asDays() == 1;
     } catch (err) {
       throw err
     }
-
     let end_dates = []
     while (end_date.diff(start_date, 'days') > 31) {
       let next_start_date = start_date.add(31, 'days')
@@ -104,9 +98,8 @@ export default class {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.NEURIO_TOKEN}`
+          'Authorization': `Bearer ${process.env.DASHBOARD_NEURIO_TOKEN}`
         }
-
       }).then(async (res) => {
         const data = await res.json()
         sensor_data.push(...data)
@@ -116,7 +109,7 @@ export default class {
       })
     }
 
-    return await this.power_company_service.analyze_neurio_data(power_company_id, is_tou, sensor_data)
+    return await this.power_company_service.analyze_neurio_data(power_company_id, hourGranularity, sensor_data)
   }
   // Billing cycles should be contiguous non-overlapping and cover all 365 days of the year
   // private validateBillingCycles(billing_cycles: BillingCycle[]): Error {
@@ -135,11 +128,4 @@ export default class {
   //     }
   //   }
   // }
-  private validate_bank(bank: Bank): boolean {
-    return (
-      bank.flat_rate_hours > 0 &&
-      bank.off_peak_hours > 0 &&
-      bank.on_peak_hours > 0
-    )
-  }
 }
