@@ -1,6 +1,7 @@
 import express from 'express'
 import { validate_jwt, format_error_response } from '../../shared/service'
 import UserController from './controller'
+import { LoginResponse } from './models'
 
 let router = express.Router()
 let controller = new UserController()
@@ -16,9 +17,9 @@ router.get("/users", validate_jwt, async (_, res) => {
   })
 })
 router.post("/users/login", async (req, res) => {
-  await controller.login(req).then((jwt: any) => {
+  await controller.login(req).then((result: LoginResponse) => {
     res.status(200)
-    res.send({ 'access_token': jwt })
+    res.send(result)
   }).catch((err: Error) => {
     console.log("Error logging in ", err)
     res.status(400)

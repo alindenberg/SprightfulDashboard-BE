@@ -19,6 +19,9 @@ export default class {
   get_location(location_id: string): Promise<Location> {
     return this.repository.get_location(location_id)
   }
+  get_locations(userId: string): Promise<Location[]> {
+    return userId ? this.repository.get_locations_for_user(userId) : this.repository.get_locations()
+  }
   create_location(
     name: string,
     neurio_sensor_id: string,

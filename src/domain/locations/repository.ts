@@ -7,6 +7,12 @@ export default class {
     this.collection_name = 'locations'
   }
 
+  get_locations(): Promise<Location[]> {
+    return getCollection(this.collection_name).find().toArray()
+  }
+  get_locations_for_user(userId: string): Promise<Location[]> {
+    return getCollection(this.collection_name).find({ owner_id: userId }).toArray()
+  }
   get_location(location_id: string): Promise<Location> {
     return getCollection(this.collection_name).findOne({ location_id: location_id })
   }

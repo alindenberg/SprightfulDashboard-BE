@@ -18,6 +18,15 @@ router.post("/locations", validate_jwt, async (req, res) => {
     res.send(format_error_response(err))
   })
 })
+router.get('/locations', validate_jwt, async (req, res) => {
+  await controller.get_locations(req).then((locations: Location[]) => {
+    res.status(200)
+    res.send(locations)
+  }).catch((err: Error) => {
+    res.status(400)
+    res.send(format_error_response(err))
+  })
+})
 router.get("/locations/:location_id", validate_jwt, async (req, res) => {
   await controller.get_location(req).then((user: any) => {
     res.status(200)

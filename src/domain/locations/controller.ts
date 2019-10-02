@@ -21,6 +21,9 @@ export default class {
   get_location(req: any) {
     return this.service.get_location(req.params.location_id)
   }
+  get_locations(req: any) {
+    return this.service.get_locations(req.query.userId)
+  }
   delete_location(req: any) {
     return this.service.delete_location(req.params.location_id)
   }

@@ -1,4 +1,4 @@
-import User from './models'
+import User, { LoginResponse } from './models'
 import UserService from './service'
 
 export default class {
@@ -21,7 +21,7 @@ export default class {
   delete_user(req: any): Promise<boolean> {
     return this.service.delete_user(req.params.user_id)
   }
-  login(req: any): Promise<string> {
+  login(req: any): Promise<LoginResponse> {
     return this.service.login(req.body.email, req.body.password)
   }
 }

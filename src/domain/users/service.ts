@@ -1,6 +1,6 @@
 import uuidv4 from 'uuid/v4'
 import crypto from 'crypto'
-import User from './models'
+import User, { LoginResponse } from './models'
 import UserRepository from './repository'
 import { generate_jwt } from '../../shared/service'
 
@@ -33,9 +33,9 @@ export default class {
   delete_user(user_id: string): Promise<boolean> {
     return this.repository.delete_user(user_id)
   }
-  login(email: string, password: string): Promise<string> {
-    return this.repository.login(email, this.hash_password(password)).then(() => {
-      return generate_jwt()
+  login(email: string, password: string): Promise<LoginResponse> {
+    return this.repository.login(email, this.hash_password(password)).then((user_id: string) => {
+      return new LoginResponse(user_id, generate_jwt())
     })
   }
   private hash_password(password: string): string {

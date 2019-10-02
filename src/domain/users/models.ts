@@ -31,6 +31,16 @@ class UserEcobeeTokens {
   }
 }
 
+export class LoginResponse {
+  user_id: string
+  jwt: string
+
+  constructor(user_id: string, jwt: string) {
+    this.user_id = user_id
+    this.jwt = jwt
+  }
+}
+
 export class CostBreakdown {
   on_peak_energy_generated: number
   on_peak_energy_consumed: number
