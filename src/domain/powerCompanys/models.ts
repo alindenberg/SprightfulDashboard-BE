@@ -33,7 +33,6 @@ export default class PowerCompany {
 
       //if we've gone to the next interval, add the previous object and reset counts
       if (date.format("MM/DD/YYYY") != current_day) {
-        console.log(`${date.format('MM/DD/YYYY')} is not equal to current day of ${current_day}`)
         parsed_data.push(
           new EnergyInfo(
             on_peak_generation,

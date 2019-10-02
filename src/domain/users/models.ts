@@ -1,5 +1,3 @@
-import crypto from 'crypto'
-
 export default class User {
   user_id: string
   first_name: string
@@ -14,7 +12,7 @@ export default class User {
     this.first_name = first_name
     this.last_name = last_name
     this.email = email
-    this.password = crypto.createHash('sha256').update(password).digest("base64")
+    this.password = password
     this.locations = locations
   }
 

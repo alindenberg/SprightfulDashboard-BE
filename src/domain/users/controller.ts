@@ -21,4 +21,7 @@ export default class {
   delete_user(req: any): Promise<boolean> {
     return this.service.delete_user(req.params.user_id)
   }
+  login(req: any): Promise<string> {
+    return this.service.login(req.body.email, req.body.password)
+  }
 }

@@ -1,6 +1,6 @@
 import express from 'express'
 import LocationController from './controller'
-import { format_error_response } from '../../shared/service'
+import { validate_jwt, format_error_response } from '../../shared/service'
 import { FplData, EnergyInfo } from '../../shared/models';
 import Location from './models';
 // import { validate_jwt } from '../../auth/service'
@@ -8,7 +8,7 @@ import Location from './models';
 let router = express.Router()
 const controller = new LocationController()
 
-router.post("/locations", async (req, res) => {
+router.post("/locations", validate_jwt, async (req, res) => {
   await controller.create_location(req).then((result: Location) => {
     res.status(200)
     res.send(result)
@@ -18,7 +18,7 @@ router.post("/locations", async (req, res) => {
     res.send(format_error_response(err))
   })
 })
-router.get("/locations/:location_id", async (req, res) => {
+router.get("/locations/:location_id", validate_jwt, async (req, res) => {
   await controller.get_location(req).then((user: any) => {
     res.status(200)
     res.send(user)
@@ -28,7 +28,7 @@ router.get("/locations/:location_id", async (req, res) => {
     res.send(format_error_response(err))
   })
 })
-router.delete("/locations/:location_id", async (req, res) => {
+router.delete("/locations/:location_id", validate_jwt, async (req, res) => {
   await controller.delete_location(req).then(() => {
     res.send(null)
     res.status(200)
@@ -37,7 +37,7 @@ router.delete("/locations/:location_id", async (req, res) => {
     res.send(format_error_response(err))
   })
 })
-router.get("/locations/:location_id/energy_info", async (req, res) => {
+router.get("/locations/:location_id/energy_info", validate_jwt, async (req, res) => {
   await controller.get_energy_info(req).then((result: EnergyInfo[]) => {
     res.status(200)
     res.send(result)
@@ -47,7 +47,7 @@ router.get("/locations/:location_id/energy_info", async (req, res) => {
     res.send(format_error_response(err))
   })
 })
-router.get("/locations/:location_id/fpl_info", async (req, res) => {
+router.get("/locations/:location_id/fpl_info", validate_jwt, async (req, res) => {
   await controller.get_fpl_info(req).then((result: FplData) => {
     res.status(200)
     res.send(result)
