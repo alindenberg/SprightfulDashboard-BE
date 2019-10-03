@@ -1,6 +1,6 @@
 import uuidv4 from 'uuid/v4'
 import crypto from 'crypto'
-import User, { LoginResponse } from './models'
+import User, { LoginResponse, UserProfile } from './models'
 import UserRepository from './repository'
 import { generate_jwt } from '../../shared/service'
 
@@ -9,26 +9,19 @@ export default class {
   constructor() {
     this.repository = new UserRepository()
   }
-  get_user(user_id: string): Promise<User> {
+  get_user(user_id: string): Promise<UserProfile> {
     // TODO: Validation on user_id i.e. make sure not null or malformed
     return this.repository.get_user(user_id)
   }
   get_users(): Promise<User[]> {
     return this.repository.get_users()
   }
-  create_user(first_name: string, last_name: string, email: string, password: string, locations: string[]): Promise<User> {
-    const user = new User(uuidv4(), first_name, last_name, email, this.hash_password(password), locations)
+  create_user(first_name: string, last_name: string, email: string): Promise<UserProfile> {
+    const user = new User(uuidv4(), first_name, last_name, email)
     return this.repository.create_user(user)
   }
-  update_user(user_id: string, first_name: string, last_name: string, email: string): Promise<User> {
-    return this.get_user(user_id).then(async (user) => {
-      // Update properties aside from id & password
-      user.first_name = first_name
-      user.last_name = last_name
-      user.email = email
-
-      return await this.repository.update_user(user)
-    })
+  update_user_email(user_id: string, email: string): Promise<boolean> {
+    return this.repository.update_user_email(user_id, email)
   }
   delete_user(user_id: string): Promise<boolean> {
     return this.repository.delete_user(user_id)

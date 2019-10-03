@@ -36,10 +36,10 @@ router.get("/users/:user_id", validate_jwt, async (req, res) => {
     res.send(format_error_response(err))
   })
 })
-router.put("/users/:user_id", validate_jwt, async (req, res) => {
-  await controller.update_user(req).then((user: any) => {
+router.put("/users/:user_id/email", validate_jwt, async (req, res) => {
+  await controller.update_user_email(req).then(() => {
     res.status(200)
-    res.send(user)
+    res.send(null)
   }).catch((err: Error) => {
     console.log("Error getting user ", err.message)
     res.status(400)

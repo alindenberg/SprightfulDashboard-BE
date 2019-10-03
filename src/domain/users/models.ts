@@ -1,27 +1,30 @@
 export default class User {
   user_id: string
+  password: string
+  profile: UserProfile
+
+
+  constructor(user_id: string, first_name: string, last_name: string, email: string) {
+    this.user_id = user_id
+    this.password = null
+    this.profile = new UserProfile(first_name, last_name, email)
+  }
+}
+export class UserProfile {
   first_name: string
   last_name: string
-  password: string
   email: string
-  locations: string[]
-  ecobee_tokens: UserEcobeeTokens
+  ecobee_tokens: EcobeeTokens
 
-  constructor(user_id: string, first_name: string, last_name: string, email: string, password: string, locations: string[]) {
-    this.user_id = user_id
+  constructor(first_name: string, last_name: string, email: string) {
     this.first_name = first_name
     this.last_name = last_name
     this.email = email
-    this.password = password
-    this.locations = locations
-  }
-
-  getName() {
-    console.log(`Name: ${this.first_name} ${this.last_name}`)
+    this.ecobee_tokens = null
   }
 }
 
-class UserEcobeeTokens {
+class EcobeeTokens {
   access_token: string
   refresh_token: string
 
