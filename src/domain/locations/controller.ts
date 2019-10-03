@@ -11,12 +11,15 @@ export default class {
   create_location(req: any): Promise<Location> {
     return this.service.create_location(
       req.body.name,
-      req.body.neurio_id,
+      req.body.owner_id,
+      req.body.sensor_id,
       req.body.fpl_id,
+      req.body.is_ssp,
+      req.body.generation_goal,
       req.body.power_company_id,
-      req.body.is_tou,
       req.body.billing_cycles,
-      req.body.thermostats)
+      req.body.thermostats
+    )
   }
   get_location(req: any) {
     return this.service.get_location(req.params.location_id)
@@ -41,7 +44,7 @@ export default class {
       }
 
       return await this.service.get_energy_info(
-        location.neurio_sensor_id,
+        location.sensor_id,
         location.power_company_id,
         start,
         end

@@ -1,14 +1,14 @@
-import PowerCompany from '../powerCompanys/models';
 import { Moment } from "moment";
-import moment = require("moment");
 
 export default class Location {
   location_id: string
   name: string
-  neurio_sensor_id: string
+  owner_id: string
+  is_ssp: boolean
   fpl_id: string
+  sensor_id: string
+  generation_goal: number
   power_company_id: string
-  is_tou: boolean
   billing_cycles: BillingCycle[]
   // Replace with Thermostat object
   thermostats: string[]
@@ -16,18 +16,22 @@ export default class Location {
   constructor(
     location_id: string,
     name: string,
-    neurio_sensor_id: string,
+    owner_id: string,
+    sensor_id: string,
+    is_ssp: boolean,
     fpl_id: string,
     power_company_id: string,
-    is_tou: boolean,
+    generation_goal: number,
     billing_cycles: BillingCycle[],
     thermostats: string[]) {
     this.location_id = location_id
     this.name = name
-    this.neurio_sensor_id = neurio_sensor_id
+    this.owner_id = owner_id
+    this.sensor_id = sensor_id
     this.fpl_id = fpl_id
     this.power_company_id = power_company_id
-    this.is_tou = is_tou
+    this.is_ssp = is_ssp
+    this.generation_goal = generation_goal
     this.billing_cycles = billing_cycles
     this.thermostats = thermostats ? thermostats : []
   }

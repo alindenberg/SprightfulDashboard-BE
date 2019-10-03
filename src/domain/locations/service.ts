@@ -24,15 +24,17 @@ export default class {
   }
   create_location(
     name: string,
-    neurio_sensor_id: string,
+    owner_id: string,
+    sensor_id: string,
     fpl_id: string,
+    is_ssp: boolean,
+    generation_goal: number,
     power_company_id: string,
-    is_tou: boolean,
     billing_cycles: BillingCycle[],
     thermostats: string[],
   ): Promise<Location> {
     // TODO - validate billing cycles
-    const location = new Location(uuidv4(), name, neurio_sensor_id, fpl_id, power_company_id, is_tou, billing_cycles, thermostats)
+    const location = new Location(uuidv4(), name, owner_id, sensor_id, is_ssp, fpl_id, power_company_id, generation_goal, billing_cycles, thermostats)
     return this.repository.create_location(location)
   }
   get_user_locations(user_id: string): Promise<Location[]> {
